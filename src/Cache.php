@@ -8,7 +8,7 @@ use CPHPCache;
 class Cache
 {
     /**
-     * Remember closure's result in cache for a given time.
+     * Remember closure's result in cache for a given amount of time.
      *
      * @param string $key
      * @param double $minutes

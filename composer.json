@@ -18,6 +18,9 @@
   "autoload": {
     "psr-4": {
       "Arrilot\\BitrixCacher\\": "src/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   }
 }
