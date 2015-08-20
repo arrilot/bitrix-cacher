@@ -7,7 +7,7 @@
 ```php
 use Arrilot\BitrixCacher\Cache;
 
-$result = Cache::remember('test4', 1, function () {
+$result = Cache::remember('cacheKeyHere', 30, function () {
     $result = 0;
     for ($i = 0; $i < 20000000; $i++) {
         $result += $i;
