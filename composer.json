@@ -1,0 +1,23 @@
+{
+  "name": "arrilot/bitrix-cacher",
+  "license": "MIT",
+  "keywords": [
+    "bitrix",
+    "cache"
+  ],
+  "authors": [
+    {
+      "name": "Nekrasov Ilya",
+      "email": "nekrasov.ilya90@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/Arrilot/bitrix-cacher",
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Arrilot\\BitrixCacher\\": "src/"
+    }
+  }
+}
