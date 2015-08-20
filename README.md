@@ -3,3 +3,19 @@
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/arrilot/bitrix-models/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/arrilot/bitrix-cacher/)
 
 #Bitrix cacher (in development)
+
+#Пример
+
+```php
+use Arrilot\BitrixCacher\Cache;
+
+$result = Cache::remember('test4', 1, function () {
+    $result = 0;
+    for ($i = 0; $i < 20000000; $i++) {
+        $result += $i;
+    }
+
+    return $result;
+});
+
+```
