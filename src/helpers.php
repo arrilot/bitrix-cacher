@@ -4,16 +4,17 @@ use Arrilot\BitrixCacher\Cache;
 
 if (! function_exists('cache')) {
     /**
-     * Remember closure's result in cache for a given amount of time.
+     * Store closure's result in the cache for a given number of minutes.
      *
      * @param string $key
      * @param double $minutes
      * @param Closure $callback
+     * @param bool|string $initDir
      *
      * @return mixed
      */
-    function cache($key, $minutes, Closure $callback)
+    function cache($key, $minutes, Closure $callback, $initDir = false)
     {
-        return Cache::remember($key, $minutes, $callback);
+        return Cache::remember($key, $minutes, $callback, $initDir);
     }
 }
