@@ -2,6 +2,7 @@
 
 namespace Arrilot\BitrixCacher;
 
+use Bitrix\Main\Data\StaticHtmlCache;
 use Closure;
 use CPHPCache;
 
@@ -53,14 +54,28 @@ class Cache
     }
 
     /**
-     * Flush all cache or cache for a specified dir.
+     * Flush cache for a specified dir.
      *
-     * @param bool $initDir
+     * @param string $initDir
      *
      * @return bool
      */
-    public function flush($initDir = false)
+    public static function flush($initDir = "")
     {
-        return bXClearCache(true, $initDir ? $initDir : '');
+        return BXClearCache(true, $initDir);
+    }
+
+    /**
+     * Flushes all bitrix cache.
+     *
+     * @return void
+     */
+    public static function flushAll()
+    {
+        $GLOBALS["CACHE_MANAGER"]->cleanAll();
+        $GLOBALS["stackCacheManager"]->cleanAll();
+        $staticHtmlCache = StaticHtmlCache::getInstance();
+        $staticHtmlCache->deleteAll();
+        BXClearCache(true);
     }
 }
