@@ -16,4 +16,6 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
     return $result;
 });
 
+Вместо Cache:remember() можно использовать хэлпер cache()
+
 ```
