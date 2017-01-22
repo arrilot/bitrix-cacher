@@ -2,6 +2,7 @@
 
 namespace Arrilot\BitrixCacher;
 
+use AbortCacheException;
 use Bitrix\Main\Data\StaticHtmlCache;
 use Closure;
 use CPHPCache;
@@ -26,15 +27,20 @@ class Cache
         }
 
         $obCache = new CPHPCache();
-        if ($obCache->initCache($minutes*60, $key, $initDir)) {
-            $vars = $obCache->getVars();
+        if ($obCache->InitCache($minutes*60, $key, $initDir)) {
+            $vars = $obCache->GetVars();
 
             return $vars['cache'];
         }
 
-        $obCache->startDataCache();
-        $cache = $callback();
-        $obCache->endDataCache(['cache' => $cache]);
+        $obCache->StartDataCache();
+        try {
+            $cache = $callback();
+            $obCache->EndDataCache(['cache' => $cache]);
+        } catch (AbortCacheException $e) {
+            $obCache->AbortDataCache();
+            $cache = null;
+        }
 
         return $cache;
     }
