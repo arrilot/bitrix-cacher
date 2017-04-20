@@ -19,7 +19,7 @@ class Cache
      *
      * @return mixed
      */
-    public static function remember($key, $minutes, Closure $callback, $initDir = false)
+    public static function remember($key, $minutes, Closure $callback, $initDir = false, $basedir = "cache")
     {
         $minutes = (double) $minutes;
         if ($minutes <= 0) {
@@ -27,7 +27,7 @@ class Cache
         }
 
         $obCache = new CPHPCache();
-        if ($obCache->InitCache($minutes*60, $key, $initDir)) {
+        if ($obCache->InitCache($minutes*60, $key, $initDir, $basedir)) {
             $vars = $obCache->GetVars();
 
             return $vars['cache'];
@@ -54,9 +54,9 @@ class Cache
      *
      * @return mixed
      */
-    public static function rememberForever($key, Closure $callback, $initDir = false)
+    public static function rememberForever($key, Closure $callback, $initDir = false, $basedir = "cache")
     {
-        return static::remember($key, 99999999, $callback, $initDir);
+        return static::remember($key, 99999999, $callback, $initDir, $basedir);
     }
 
     /**
