@@ -28,4 +28,13 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
 
 ```
 
-Также для удобства вместо ```Cache::remember()``` можно использовать хэлпер ```cache()```
+Для удобства рекомендуется добавить глобальный хэлпер:
+
+```php
+function cache($key, $minutes, Closure $callback, $initDir = false, $basedir = "cache")
+{
+    return Cache::remember($key, $minutes, $callback, $initDir, $basedir);
+}
+```
+
+и использовать его вместо `Cache::remember()`
