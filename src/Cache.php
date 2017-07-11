@@ -2,7 +2,6 @@
 
 namespace Arrilot\BitrixCacher;
 
-use AbortCacheException;
 use Bitrix\Main\Data\StaticHtmlCache;
 use Closure;
 use CPHPCache;
