@@ -11,14 +11,14 @@ class Cache
     /**
      * Store closure's result in the cache for a given number of minutes.
      *
-     * @param string  $key
-     * @param double  $minutes
+     * @param string $key
+     * @param double $minutes
      * @param Closure $callback
      * @param bool|string $initDir
-     *
+     * @param string $basedir
      * @return mixed
      */
-    public static function remember($key, $minutes, Closure $callback, $initDir = false, $basedir = "cache")
+    public static function remember($key, $minutes, Closure $callback, $initDir = '/', $basedir = 'cache')
     {
         $minutes = (double) $minutes;
         if ($minutes <= 0) {
@@ -50,10 +50,10 @@ class Cache
      * @param string $key
      * @param Closure $callback
      * @param bool|string $initDir
-     *
+     * @param string $basedir
      * @return mixed
      */
-    public static function rememberForever($key, Closure $callback, $initDir = false, $basedir = "cache")
+    public static function rememberForever($key, Closure $callback, $initDir = '/', $basedir = 'cache')
     {
         return static::remember($key, 99999999, $callback, $initDir, $basedir);
     }
