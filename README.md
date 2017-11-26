@@ -38,5 +38,6 @@ function cache($key, $minutes, Closure $callback, $initDir = '/', $basedir = 'ca
 ```
 
 и использовать его вместо `Cache::remember()`
+
 Обратите внимание, что в отличии от `CPHPCache::InitCache()` (и его аналога из d7) по-умолчанию `$initDir = '/'`, а не false.
 Это значит, что по-умолчанию кэш доступен для всего сайта.
