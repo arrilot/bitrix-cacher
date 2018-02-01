@@ -22,7 +22,11 @@ class Cache
     {
         $minutes = (double) $minutes;
         if ($minutes <= 0) {
-            return $callback();
+            try {
+                return $callback();
+            } catch (AbortCacheException $e) {
+                return null;
+            }
         }
 
         $obCache = new CPHPCache();
