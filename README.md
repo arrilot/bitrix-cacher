@@ -20,6 +20,7 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
     }
     
     if ( // something bad happenned ) {
+        // выполнит `$obCache->AbortDataCache()` и вернёт null в качестве $result
         throw new AbortCacheException();
     }
 
