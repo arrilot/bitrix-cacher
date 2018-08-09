@@ -8,6 +8,8 @@
 
 ## Использование
 
+### Через метод
+
 ```php
 
 use Arrilot\BitrixCacher\Cache;
@@ -32,13 +34,73 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
 Для удобства рекомендуется добавить глобальный хэлпер:
 
 ```php
-function cache($key, $minutes, Closure $callback, $initDir = '/', $basedir = 'cache')
+/**
+ * @param null|string $key
+ * @param null|float $minutes
+ * @param null|Closure $callback
+ * @param string $initDir
+ * @param string $basedir
+ * @return \Arrilot\BitrixCacher\CacheBuilder|mixed
+ */
+function cache($key = null, $minutes = null, $callback = null, $initDir = '/', $basedir = 'cache')
 {
-    return Cache::remember($key, $minutes, $callback, $initDir, $basedir);
+    if (func_num_args() === 0) {
+        return new \Arrilot\BitrixCacher\CacheBuilder();
+    }
+
+    return \Arrilot\BitrixCacher\Cache::remember($key, $minutes, $callback, $initDir, $basedir);
 }
 ```
 
-и использовать его вместо `Cache::remember()`
+и использовать его либо вместо `Cache::remember()`, либо как начало цепочки построения кэша CacheBuilder-а
 
 Обратите внимание, что в отличии от `CPHPCache::InitCache()` (и его аналога из d7) по-умолчанию `$initDir = '/'`, а не false.
 Это значит, что по-умолчанию кэш доступен для всего сайта.
+
+### Через CacheBuilder
+
+```php
+
+$result = cache()
+    ->key('cacheKeyHere')
+    ->minutes(30) // также доступны методы seconds(), hours(), days()
+    ->initDir('/foo') // можно опустить если хотим использовать значение по-умолчанию
+    ->baseDir('cache/foo') // можно опустить если хотим использовать значение по-умолчанию
+    ->execute(function () {
+        ...
+        return ...;
+    });
+```
+
+### Кэширование в php-переменную
+
+В случаях, когда возможен многократный вызов одного и того же кэша (т.е. с одними и теми же параметрами key, initDir, baseDir) в течение выполнения одного скрипта,
+разумно добавлять дополнительное кэширование в php переменную, чтобы не дергать внешнее хранилище с кэшем (файлы, memcache и т д) просто так несколько раз.
+С использованием CacheBuilder это сделать очень просто - надо добавить `->enablePhpLayer()` в цепочку построения кэша.
+
+```php
+
+$result = cache()
+    ->key('cacheKeyHere')
+    ->minutes(30)
+    ->enablePhpLayer()
+    ->execute(function () {
+        ...
+        return ...;
+    });
+```
+
+Если есть потребность кэшировать вообще только в php-переменную (не трогая внешнее хранилище), то это делается вот так:
+
+```php
+
+$result = cache()
+    ->key('cacheKeyHere')
+    ->onlyPhpCache()
+    ->execute(function () {
+        ...
+        return ...;
+    });
+```
+
+Время кэширования в этом случае уже, конечно, не имеет смысла.
