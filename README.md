@@ -1,6 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/arrilot/bitrix-cacher/v/stable.svg)](https://packagist.org/packages/arrilot/bitrix-cacher/)
 
-# Обёртка над ядром Битрикса для более удобного кэширования php переменных
+# Bitrix Cacher - обёртка над ядром Bitrix для более удобного кэширования PHP-переменных
 
 ## Установка
 
@@ -22,7 +22,7 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
     }
     
     if ( // something bad happenned ) {
-        // выполнит `$obCache->AbortDataCache()` и вернёт null в качестве $result
+        // выполнит $obCache->AbortDataCache() и вернёт null в качестве $result
         throw new AbortCacheException();
     }
 
