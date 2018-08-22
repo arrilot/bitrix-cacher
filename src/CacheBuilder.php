@@ -68,7 +68,7 @@ class CacheBuilder
      */
     public function seconds($seconds)
     {
-        $this->minutes = $seconds * 60;
+        $this->minutes = $seconds / 60;
 
         return $this;
     }
@@ -92,7 +92,7 @@ class CacheBuilder
      */
     public function hours($hours)
     {
-        $this->minutes = intval($hours / 60);
+        $this->minutes = intval($hours * 60);
 
         return $this;
     }
@@ -104,7 +104,7 @@ class CacheBuilder
      */
     public function days($days)
     {
-        $this->minutes = intval($days / 60 / 24);
+        $this->minutes = intval($days * 60 * 24);
         
         return $this;
     }
