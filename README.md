@@ -96,7 +96,7 @@ $result = cache()
 
 $result = cache()
     ->key('cacheKeyHere')
-    ->onlyPhpCache()
+    ->onlyPhpLayer()
     ->execute(function () {
         ...
         return ...;
