@@ -4,7 +4,8 @@
 
 ## Установка
 
-```composer require arrilot/bitrix-cacher```
+1. ```composer require arrilot/bitrix-cacher```
+2. Регистрируем пакет в `init.php` - `Arrilot\BitrixCacher\ServiceProvider::register();`
 
 ## Использование
 
@@ -21,7 +22,7 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
         $result += $i;
     }
     
-    if ( // something bad happenned ) {
+    if ( // something bad happened ) {
         // выполнит $obCache->AbortDataCache() и вернёт null в качестве $result
         throw new AbortCacheException();
     }
@@ -104,3 +105,11 @@ $result = cache()
 ```
 
 Время кэширования в этом случае уже, конечно, не имеет смысла.
+
+### Отладка
+
+Пакет предоставляет дополнительное окно отладки в котором можно посмотреть
+- сколько и каких мы сделали запросов в кэш,
+- сколько хитов,
+- сколько мисов,
+- сколько запросов с нулевым TTL и которые не кэшируются, соответственно, вообще

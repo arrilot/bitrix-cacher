@@ -2,6 +2,7 @@
 
 namespace Arrilot\BitrixCacher;
 
+use Arrilot\BitrixCacher\Debug\CacheDebugger;
 use Bitrix\Main\Data\StaticHtmlCache;
 use Closure;
 use CPHPCache;
@@ -20,18 +21,30 @@ class Cache
      */
     public static function remember($key, $minutes, Closure $callback, $initDir = '/', $basedir = 'cache')
     {
+        $debug = \Bitrix\Main\Data\Cache::getShowCacheStat();
+
         $minutes = (double) $minutes;
         if ($minutes <= 0) {
             try {
-                return $callback();
+                $result = $callback();
             } catch (AbortCacheException $e) {
-                return null;
+                $result = null;
             }
+
+            if ($debug) {
+                CacheDebugger::track('zero_ttl', $initDir, $basedir, $key, $result);
+            }
+
+            return $result;
         }
 
         $obCache = new CPHPCache();
         if ($obCache->InitCache($minutes*60, $key, $initDir, $basedir)) {
             $vars = $obCache->GetVars();
+
+            if ($debug) {
+                CacheDebugger::track('hits', $initDir, $basedir, $key, $vars['cache']);
+            }
 
             return $vars['cache'];
         }
@@ -43,6 +56,10 @@ class Cache
         } catch (AbortCacheException $e) {
             $obCache->AbortDataCache();
             $cache = null;
+        }
+
+        if ($debug) {
+            CacheDebugger::track('misses', $initDir, $basedir, $key, $cache);
         }
 
         return $cache;
