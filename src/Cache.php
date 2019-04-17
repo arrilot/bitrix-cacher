@@ -10,21 +10,20 @@ use CPHPCache;
 class Cache
 {
     /**
-     * Store closure's result in the cache for a given number of minutes.
+     * Store closure's result in the cache for a given number of seconds.
      *
      * @param string $key
-     * @param double $minutes
+     * @param int $seconds
      * @param Closure $callback
      * @param bool|string $initDir
      * @param string $basedir
      * @return mixed
      */
-    public static function remember($key, $minutes, Closure $callback, $initDir = '/', $basedir = 'cache')
+    public static function remember($key, $seconds, Closure $callback, $initDir = '/', $basedir = 'cache')
     {
         $debug = \Bitrix\Main\Data\Cache::getShowCacheStat();
 
-        $minutes = (double) $minutes;
-        if ($minutes <= 0) {
+        if ($seconds <= 0) {
             try {
                 $result = $callback();
             } catch (AbortCacheException $e) {
@@ -39,7 +38,7 @@ class Cache
         }
 
         $obCache = new CPHPCache();
-        if ($obCache->InitCache($minutes*60, $key, $initDir, $basedir)) {
+        if ($obCache->InitCache($seconds, $key, $initDir, $basedir)) {
             $vars = $obCache->GetVars();
 
             if ($debug) {

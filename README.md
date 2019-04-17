@@ -16,7 +16,7 @@
 use Arrilot\BitrixCacher\Cache;
 use Arrilot\BitrixCacher\AbortCacheException;
 
-$result = Cache::remember('cacheKeyHere', 30, function () {
+$result = Cache::remember('cacheKeyHere', 3600, function () {
     $result = 0;
     for ($i = 0; $i < 20000000; $i++) {
         $result += $i;
@@ -37,19 +37,19 @@ $result = Cache::remember('cacheKeyHere', 30, function () {
 ```php
 /**
  * @param null|string $key
- * @param null|float $minutes
+ * @param null|int $seconds
  * @param null|Closure $callback
  * @param string $initDir
  * @param string $basedir
  * @return \Arrilot\BitrixCacher\CacheBuilder|mixed
  */
-function cache($key = null, $minutes = null, $callback = null, $initDir = '/', $basedir = 'cache')
+function cache($key = null, $seconds = null, $callback = null, $initDir = '/', $basedir = 'cache')
 {
     if (func_num_args() === 0) {
         return new \Arrilot\BitrixCacher\CacheBuilder();
     }
 
-    return \Arrilot\BitrixCacher\Cache::remember($key, $minutes, $callback, $initDir, $basedir);
+    return \Arrilot\BitrixCacher\Cache::remember($key, $seconds, $callback, $initDir, $basedir);
 }
 ```
 
@@ -64,7 +64,7 @@ function cache($key = null, $minutes = null, $callback = null, $initDir = '/', $
 
 $result = cache()
     ->key('cacheKeyHere')
-    ->minutes(30) // также доступны методы seconds(), hours(), days()
+    ->seconds(3600) // также доступны методы minutes(), hours(), days()
     ->initDir('/foo') // можно опустить если хотим использовать значение по-умолчанию
     ->baseDir('cache/foo') // можно опустить если хотим использовать значение по-умолчанию
     ->execute(function () {
@@ -83,7 +83,7 @@ $result = cache()
 
 $result = cache()
     ->key('cacheKeyHere')
-    ->minutes(30)
+    ->seconds(3600)
     ->enablePhpLayer()
     ->execute(function () {
         ...

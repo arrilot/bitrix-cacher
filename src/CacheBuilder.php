@@ -15,9 +15,9 @@ class CacheBuilder
     protected $key;
 
     /**
-     * @var float
+     * @var int
      */
-    protected $minutes;
+    protected $seconds;
 
     /**
      * @var string
@@ -63,49 +63,49 @@ class CacheBuilder
     
     /**
      * Setter for time.
-     * @param $seconds
+     * @param int $seconds
      * @return CacheBuilder
      */
     public function seconds($seconds)
     {
-        $this->minutes = $seconds / 60;
+        $this->seconds = $seconds;
 
         return $this;
     }
     
     /**
      * Setter for time.
-     * @param $minutes
+     * @param double|int $minutes
      * @return CacheBuilder
      */
     public function minutes($minutes)
     {
-        $this->minutes = $minutes;
+        $this->seconds = intval($minutes * 60);
 
         return $this;
     }
 
     /**
      * Setter for time.
-     * @param $hours
+     * @param double|int $hours
      * @return CacheBuilder
      */
     public function hours($hours)
     {
-        $this->minutes = intval($hours * 60);
+        $this->seconds = intval($hours * 60 * 60);
 
         return $this;
     }
 
     /**
      * Setter for time.
-     * @param $days
+     * @param double|int $days
      * @return CacheBuilder
      */
     public function days($days)
     {
-        $this->minutes = intval($days * 60 * 24);
-        
+        $this->seconds = intval($days * 60 * 60 * 24);
+
         return $this;
     }
 
@@ -154,11 +154,11 @@ class CacheBuilder
             throw new LogicException('Key is not set.');
         }
 
-        if (is_null($this->minutes)) {
+        if (is_null($this->seconds)) {
             throw new LogicException('Time is not set.');
         }
 
-        $result = Cache::remember($this->key, $this->minutes, $callback, $this->initDir, $this->baseDir);
+        $result = Cache::remember($this->key, $this->seconds, $callback, $this->initDir, $this->baseDir);
         if ($this->phpLayer) {
             $this->phpCache->put($this->constructPhpCacheKey(), $result);
         }
@@ -169,7 +169,7 @@ class CacheBuilder
     public function restoreDefaults()
     {
         $this->key = null;
-        $this->minutes = null;
+        $this->seconds = null;
         $this->initDir = '/';
         $this->baseDir = 'cache';
         $this->phpLayer = false;
