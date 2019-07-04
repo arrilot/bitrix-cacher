@@ -44,6 +44,11 @@ class CacheBuilder
      */
     protected $onlyPhpLayer;
 
+    /**
+     * @var mixed
+     */
+    protected $whenAbort;
+
     public function __construct()
     {
         $this->restoreDefaults();
@@ -122,6 +127,18 @@ class CacheBuilder
     }
 
     /**
+     * Setter for whenAbort. Value or callable
+     * @param mixed $value
+     * @return CacheBuilder
+     */
+    public function whenAbort($value)
+    {
+        $this->whenAbort= $value;
+
+        return $this;
+    }
+
+    /**
      * Setter for initDir.
      * @param $dir
      * @return CacheBuilder
@@ -149,7 +166,7 @@ class CacheBuilder
         if ($this->onlyPhpLayer) {
             return $this->executeWithPhpCache($callback);
         }
-        
+
         if (is_null($this->key)) {
             throw new LogicException('Key is not set.');
         }
@@ -158,7 +175,7 @@ class CacheBuilder
             throw new LogicException('Time is not set.');
         }
 
-        $result = Cache::remember($this->key, $this->seconds, $callback, $this->initDir, $this->baseDir);
+        $result = Cache::remember($this->key, $this->seconds, $callback, $this->initDir, $this->baseDir, $this->whenAbort);
         if ($this->phpLayer) {
             $this->phpCache->put($this->constructPhpCacheKey(), $result);
         }
@@ -175,6 +192,7 @@ class CacheBuilder
         $this->phpLayer = false;
         $this->onlyPhpLayer = false;
         $this->phpCache = PhpCache::getInstance();
+        $this->whenAbort = null;
 
         return $this;
     }

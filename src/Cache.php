@@ -17,9 +17,10 @@ class Cache
      * @param Closure $callback
      * @param bool|string $initDir
      * @param string $basedir
+     * @param mixed $whenAbort
      * @return mixed
      */
-    public static function remember($key, $seconds, Closure $callback, $initDir = '/', $basedir = 'cache')
+    public static function remember($key, $seconds, Closure $callback, $initDir = '/', $basedir = 'cache', $whenAbort = null)
     {
         $debug = \Bitrix\Main\Data\Cache::getShowCacheStat();
 
@@ -27,7 +28,7 @@ class Cache
             try {
                 $result = $callback();
             } catch (AbortCacheException $e) {
-                $result = null;
+                $result = is_callable($whenAbort) ? $whenAbort() : $whenAbort;
             }
 
             if ($debug) {
@@ -54,7 +55,7 @@ class Cache
             $obCache->EndDataCache(['cache' => $cache]);
         } catch (AbortCacheException $e) {
             $obCache->AbortDataCache();
-            $cache = null;
+            $cache = is_callable($whenAbort) ? $whenAbort() : $whenAbort;
         }
 
         if ($debug) {
