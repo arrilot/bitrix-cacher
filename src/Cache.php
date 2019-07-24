@@ -56,6 +56,9 @@ class Cache
         } catch (AbortCacheException $e) {
             $obCache->AbortDataCache();
             $cache = is_callable($whenAbort) ? $whenAbort() : $whenAbort;
+        } catch (\Exception $e) {
+            $obCache->AbortDataCache();
+            throw $e;
         }
 
         if ($debug) {
